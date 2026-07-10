@@ -550,6 +550,48 @@ footer .heart {
 }
 
 /* ============ Responsive ============ */
+/* ============ Snake Game ============ */
+.snake-score {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--text-light);
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.snake-score span {
+  color: var(--red);
+  font-weight: 700;
+}
+
+#snakeCanvas {
+  display: block;
+  margin: 0 auto;
+  border: 1px solid var(--red-dark);
+  border-radius: 4px;
+  background: rgba(0,0,0,0.6);
+  max-width: 100%;
+}
+
+.snake-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.snake-hint {
+  text-align: center;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  #snakeCanvas { width: 320px; height: 320px; }
+}
+
 @media (max-width: 768px) {
   nav { padding: 12px 16px; }
   nav .links { gap: 16px; }
@@ -882,6 +924,503 @@ footer .heart {
   .btn-icon { width: 14px; height: 14px; }
   .volume-slider-wrap { width: 36px; }
 }
+
+/* ============ Nav Else Button & Dropdown ============ */
+.nav-right {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.nav-else-btn {
+  background: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.nav-else-btn:hover {
+  border-color: var(--red-dark);
+  background: rgba(196,30,58,0.06);
+}
+
+.nav-else-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  opacity: 0.65;
+  transition: opacity 0.25s ease;
+}
+
+.nav-else-btn:hover .nav-else-icon { opacity: 1; }
+
+.nav-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: rgba(10,10,10,0.98);
+  border: 1px solid rgba(196,30,58,0.25);
+  border-radius: 6px;
+  min-width: 140px;
+  overflow: hidden;
+  z-index: 300;
+  display: none;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+  animation: dropIn 0.2s ease;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.nav-dropdown.open { display: block; }
+
+.dropdown-item {
+  padding: 12px 20px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  user-select: none;
+}
+
+.dropdown-item:last-child { border-bottom: none; }
+
+.dropdown-item:hover {
+  color: var(--red);
+  background: rgba(196,30,58,0.08);
+}
+
+/* ============ Utility Panel Overlay ============ */
+.util-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(2,2,2,0.93);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+}
+
+.util-overlay.active { display: flex; }
+
+.util-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--red-dark);
+  border-radius: 8px;
+  padding: 28px 30px;
+  max-width: 480px;
+  width: 92%;
+  max-height: 82vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 0 80px rgba(196,30,58,0.12);
+  animation: zoomIn 0.25s ease;
+  scrollbar-width: thin;
+  scrollbar-color: var(--red-dark) transparent;
+}
+
+.util-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.util-panel-header h3 {
+  font-size: 1.15rem;
+  color: var(--text-light);
+  letter-spacing: 3px;
+  font-weight: 600;
+}
+
+.util-panel-close {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.2rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.util-panel-close:hover {
+  color: var(--red);
+  border-color: var(--red-dark);
+}
+
+/* ============ Pomodoro Timer ============ */
+.pomodoro-display {
+  text-align: center;
+  padding: 28px 0 18px;
+}
+
+.pomodoro-time {
+  font-size: 4.5rem;
+  font-weight: 700;
+  color: var(--red);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 4px;
+  text-shadow: 0 0 30px rgba(196,30,58,0.35);
+  font-family: 'Segoe UI', 'Consolas', monospace;
+}
+
+.pomodoro-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 3px;
+  margin-top: 6px;
+}
+
+.pomodoro-controls {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pomodoro-btn {
+  background: none;
+  border: 1px solid var(--red-dark);
+  color: var(--text);
+  cursor: pointer;
+  padding: 8px 22px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  transition: all 0.2s ease;
+}
+
+.pomodoro-btn:hover {
+  border-color: var(--red);
+  color: var(--red);
+  box-shadow: 0 0 14px rgba(196,30,58,0.15);
+}
+
+.pomodoro-btn.primary-btn {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.pomodoro-btn.primary-btn:hover {
+  background: var(--red-glow);
+  box-shadow: 0 0 20px rgba(255,45,45,0.35);
+}
+
+.pomodoro-presets {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.pomodoro-preset {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+}
+
+.pomodoro-preset:hover { border-color: var(--red-dark); color: var(--text-light); }
+.pomodoro-preset.active { border-color: var(--red); color: var(--red); }
+
+/* ============ Period Tracker ============ */
+.period-month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.period-month-nav button {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.period-month-nav button:hover { color: var(--red); border-color: var(--red-dark); }
+.period-month-nav button:hover { color: var(--red); border-color: var(--red-dark); }
+
+.period-date-pickers {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  position: relative;
+}
+
+.period-year-label, .period-month-label-click {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  padding: 4px 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.period-year-label:hover, .period-month-label-click:hover {
+  border-color: var(--red-dark);
+  color: var(--red);
+}
+
+.period-picker-wrap {
+  position: absolute;
+  background: rgba(10,10,10,0.98);
+  border: 1px solid rgba(196,30,58,0.25);
+  border-radius: 6px;
+  z-index: 10;
+  display: none;
+  max-height: 180px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--red-dark) transparent;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.8);
+  min-width: 80px;
+  animation: dropIn 0.18s ease;
+}
+
+.period-picker-wrap.open { display: block; }
+
+.period-picker-item {
+  padding: 10px 28px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  transition: all 0.15s ease;
+  text-align: center;
+  user-select: none;
+}
+
+.period-picker-item:hover {
+  color: var(--red);
+  background: rgba(196,30,58,0.1);
+}
+
+.period-picker-item.active {
+  color: var(--red);
+  background: rgba(196,30,58,0.15);
+}
+.period-month-nav .month-label {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+}
+
+.period-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  text-align: center;
+}
+
+.period-day-header {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  padding: 6px 0;
+}
+
+.period-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.period-day:hover { border-color: var(--red-dark); color: var(--text-light); }
+.period-day.empty { cursor: default; }
+.period-day.today { border-color: var(--red-dark); }
+.period-day.marked {
+  background: rgba(196,30,58,0.25);
+  color: var(--red-glow);
+  border-color: var(--red);
+  font-weight: 600;
+}
+
+.period-stats {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.period-stat {
+  text-align: center;
+}
+
+.period-stat .stat-num {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--red);
+}
+
+.period-stat .stat-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+}
+
+/* ============ Notepad ============ */
+/* Notepad flex layout for proper scrolling */
+#notepadPanel .util-panel {
+  display: flex;
+  flex-direction: column;
+  max-height: 82vh;
+  overflow: hidden;
+}
+
+#notepadPanel .util-panel-header { flex-shrink: 0; }
+
+.notepad-today-section {
+  flex-shrink: 0;
+}
+
+.notepad-divider { flex-shrink: 0; }
+
+.notepad-feed {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  max-height: none;
+}
+
+.notepad-today-section {
+  margin-bottom: 0;
+}
+
+.notepad-today-label {
+  font-size: 0.82rem;
+  color: var(--red);
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.notepad-area {
+  width: 100%;
+  min-height: 140px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  font-family: 'Microsoft YaHei', sans-serif;
+  line-height: 1.8;
+  padding: 14px;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.3s ease;
+  letter-spacing: 1px;
+}
+
+.notepad-area:focus { border-color: var(--red-dark); }
+
+.notepad-area::placeholder { color: rgba(138,126,114,0.4); letter-spacing: 2px; }
+
+.notepad-hint {
+  text-align: right;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  margin-top: 6px;
+  transition: color 0.3s ease;
+}
+
+.notepad-hint.saved { color: var(--red); }
+
+.notepad-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--red-dark), transparent);
+  margin: 18px 0;
+}
+
+.notepad-feed {
+  max-height: 300px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--red-dark) transparent;
+}
+
+.notepad-entry {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.notepad-entry:last-child { border-bottom: none; margin-bottom: 0; }
+
+.notepad-entry-date {
+  font-size: 0.78rem;
+  color: var(--red);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.notepad-entry-content {
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.8;
+  letter-spacing: 1px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.notepad-empty-feed {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  padding: 20px 0;
+  opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+  .util-panel { padding: 20px; max-width: 96%; }
+  .pomodoro-time { font-size: 3.2rem; }
+  .nav-else-icon { width: 18px; height: 18px; }
+  .nav-dropdown { min-width: 120px; right: -8px; }
+  .dropdown-item { padding: 10px 16px; font-size: 0.78rem; }
+  .period-calendar { gap: 2px; }
+  .period-day { font-size: 0.7rem; }
+}
+
 </style>
 </head>
 <body>
@@ -897,6 +1436,17 @@ footer .heart {
     <li><a href="#gallery">照片墙</a></li>
     <li><a href="#quotes">语录</a></li>
   </ul>
+  <div class="nav-right">
+    <button class="nav-else-btn" id="btnElse" title="更多功能">
+      <img src="icon/else.png" alt="" class="nav-else-icon">
+    </button>
+    <div class="nav-dropdown" id="navDropdown">
+      <div class="dropdown-item" data-panel="pomodoro">番茄钟</div>
+      <div class="dropdown-item" data-panel="period">经期记录</div>
+      <div class="dropdown-item" data-panel="notepad">记事本</div>
+      <div class="dropdown-item" data-panel="snake">贪吃鸦</div>
+    </div>
+  </div>
 </nav>
 
 <!-- Hero Section -->
@@ -1050,6 +1600,102 @@ footer .heart {
   </svg>
   <p>秦彻 <span class="heart">♥</span> 专属回忆 · 2026</p>
 </footer>
+
+<!-- Pomodoro Panel -->
+<div class="util-overlay" id="pomodoroPanel">
+  <div class="util-panel">
+    <div class="util-panel-header">
+      <h3>番茄钟</h3>
+      <button class="util-panel-close" onclick="closeUtilPanel('pomodoro')">✕</button>
+    </div>
+    <div class="pomodoro-display">
+      <div class="pomodoro-time" id="pomodoroTime">15:00</div>
+      <div class="pomodoro-label" id="pomodoroLabel">专注</div>
+    </div>
+    <div class="pomodoro-presets" id="pomodoroPresets">
+      <button class="pomodoro-preset active" data-min="15" data-label="专注">15分钟</button>
+      <button class="pomodoro-preset" data-min="30" data-label="专注">30分钟</button>
+      <button class="pomodoro-preset" data-min="60" data-label="深度专注">60分钟</button>
+    </div>
+    <div class="pomodoro-controls">
+      <button class="pomodoro-btn primary-btn" id="btnPomodoroStart">开始</button>
+      <button class="pomodoro-btn" id="btnPomodoroReset">重置</button>
+      <button class="pomodoro-btn" id="btnPomodoroEnd">结束</button>
+    </div>
+  </div>
+</div>
+
+<!-- Period Tracker Panel -->
+<div class="util-overlay" id="periodPanel">
+  <div class="util-panel">
+    <div class="util-panel-header">
+      <h3>经期记录</h3>
+      <button class="util-panel-close" onclick="closeUtilPanel('period')">✕</button>
+    </div>
+    <div class="period-month-nav">
+      <button id="btnPeriodPrev">◂</button>
+      <div class="period-date-pickers">
+        <span class="period-year-label" id="periodYearLabel">2026年</span>
+        <span class="period-month-label-click" id="periodMonthLabelClick">7月</span>
+      </div>
+      <button id="btnPeriodNext">▸</button>
+    </div>
+    <div class="period-picker-wrap" id="periodYearPickerWrap">
+      <div class="period-picker-list" id="periodYearList"></div>
+    </div>
+    <div class="period-picker-wrap" id="periodMonthPickerWrap">
+      <div class="period-picker-list" id="periodMonthList"></div>
+    </div>
+    <div class="period-calendar" id="periodCalendar"></div>
+    <div class="period-stats">
+      <div class="period-stat">
+        <div class="stat-num" id="periodCycleLen">--</div>
+        <div class="stat-label">平均周期(天)</div>
+      </div>
+      <div class="period-stat">
+        <div class="stat-num" id="periodMarkedCount">--</div>
+        <div class="stat-label">本月标记</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Notepad Panel -->
+<div class="util-overlay" id="notepadPanel">
+  <div class="util-panel" style="max-width:540px;">
+    <div class="util-panel-header">
+      <h3>记事本</h3>
+      <button class="util-panel-close" onclick="closeUtilPanel('notepad')">✕</button>
+    </div>
+    <div class="notepad-today-section">
+      <div class="notepad-today-label" id="notepadTodayLabel">写今天</div>
+      <textarea class="notepad-area" id="notepadArea" placeholder="记录今天的点点滴滴..."></textarea>
+      <div class="notepad-hint" id="notepadHint">已自动保存</div>
+    </div>
+    <div class="notepad-divider"></div>
+    <div class="notepad-feed" id="notepadFeed"></div>
+  </div>
+</div>
+
+
+<!-- Snake Game Panel -->
+<div class="util-overlay" id="snakePanel">
+  <div class="util-panel" style="max-width:480px;">
+    <div class="util-panel-header">
+      <h3>贪吃鸦</h3>
+      <button class="util-panel-close" onclick="closeUtilPanel('snake')">✕</button>
+    </div>
+    <div class="snake-score">得分: <span id="snakeScore">0</span>  |  最高: <span id="snakeBest">0</span></div>
+    <canvas id="snakeCanvas" width="400" height="400"></canvas>
+    <div class="snake-controls">
+      <button class="pomodoro-btn primary-btn" id="btnSnakeStart">开始游戏</button>
+      <button class="pomodoro-btn" id="btnSnakePause" style="display:none;">暂停</button>
+      <button class="pomodoro-btn" id="btnSnakeEnd" style="display:none;">结束</button>
+    </div>
+    <div class="snake-hint">↑ ↓ ← → 方向键控制  ·  空格键暂停</div>
+  </div>
+</div>
 
 <script>
 // ============ Photos Data ============
@@ -1603,7 +2249,650 @@ tryAutoPlay();
 updateVolumeIcon();
 renderPlaylist();
 updateModeBtn();
+
+// ============ Else Dropdown ============
+var btnElse = document.getElementById('btnElse');
+var navDropdown = document.getElementById('navDropdown');
+
+btnElse.addEventListener('click', function(e) {
+  e.stopPropagation();
+  navDropdown.classList.toggle('open');
+});
+
+document.addEventListener('click', function(e) {
+  if (!navDropdown.contains(e.target) && e.target !== btnElse) {
+    navDropdown.classList.remove('open');
+  }
+});
+
+// Open panels from dropdown
+document.querySelectorAll('.dropdown-item').forEach(function(item) {
+  item.addEventListener('click', function() {
+    var panel = this.dataset.panel;
+    navDropdown.classList.remove('open');
+    openUtilPanel(panel);
+  });
+});
+
+// Utility panel open/close
+function openUtilPanel(name) {
+  var panelId = name + 'Panel';
+  document.getElementById(panelId).classList.add('active');
+  document.body.style.overflow = 'hidden';
+  if (name === 'pomodoro') resetPomodoro();
+  if (name === 'period') renderPeriodCalendar();
+}
+
+function closeUtilPanel(name) {
+  var panelId = name + 'Panel';
+  document.getElementById(panelId).classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Close panel on overlay click
+document.querySelectorAll('.util-overlay').forEach(function(overlay) {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+});
+
+// ESC to close panels
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.util-overlay.active').forEach(function(o) {
+      o.classList.remove('active');
+    });
+    document.body.style.overflow = '';
+  }
+});
+
+// ============ Pomodoro Timer ============
+var pomodoroMinutes = 15;
+var pomodoroSeconds = 0;
+var pomodoroInterval = null;
+var pomodoroRunning = false;
+
+var pomodoroTimeEl = document.getElementById('pomodoroTime');
+var pomodoroLabelEl = document.getElementById('pomodoroLabel');
+var btnPomodoroStart = document.getElementById('btnPomodoroStart');
+var btnPomodoroReset = document.getElementById('btnPomodoroReset');
+
+function updatePomodoroDisplay() {
+  pomodoroTimeEl.textContent = String(pomodoroMinutes).padStart(2, '0') + ':' + String(pomodoroSeconds).padStart(2, '0');
+}
+
+function resetPomodoro() {
+  clearInterval(pomodoroInterval);
+  pomodoroRunning = false;
+  pomodoroMinutes = parseInt(document.querySelector('.pomodoro-preset.active').dataset.min);
+  pomodoroSeconds = 0;
+  pomodoroLabelEl.textContent = document.querySelector('.pomodoro-preset.active').dataset.label;
+  updatePomodoroDisplay();
+  btnPomodoroStart.textContent = '开始';
+  btnPomodoroStart.classList.add('primary-btn');
+}
+
+btnPomodoroStart.addEventListener('click', function() {
+  if (pomodoroRunning) {
+    clearInterval(pomodoroInterval);
+    pomodoroRunning = false;
+    btnPomodoroStart.textContent = '继续';
+    btnPomodoroStart.classList.add('primary-btn');
+    return;
+  }
+  pomodoroRunning = true;
+  btnPomodoroStart.textContent = '暂停';
+  btnPomodoroStart.classList.remove('primary-btn');
+  var label = document.querySelector('.pomodoro-preset.active').dataset.label;
+  pomodoroInterval = setInterval(function() {
+    if (pomodoroSeconds === 0) {
+      if (pomodoroMinutes === 0) {
+        clearInterval(pomodoroInterval);
+        pomodoroRunning = false;
+        btnPomodoroStart.textContent = '开始';
+        btnPomodoroStart.classList.add('primary-btn');
+        pomodoroLabelEl.textContent = '时间到！';
+        return;
+      }
+      pomodoroMinutes--;
+      pomodoroSeconds = 59;
+    } else {
+      pomodoroSeconds--;
+    }
+    pomodoroLabelEl.textContent = label;
+    updatePomodoroDisplay();
+  }, 1000);
+});
+
+btnPomodoroReset.addEventListener('click', resetPomodoro);
+
+var btnPomodoroEnd = document.getElementById('btnPomodoroEnd');
+btnPomodoroEnd.addEventListener('click', function() {
+  clearInterval(pomodoroInterval);
+  pomodoroRunning = false;
+  pomodoroMinutes = parseInt(document.querySelector('.pomodoro-preset.active').dataset.min);
+  pomodoroSeconds = 0;
+  updatePomodoroDisplay();
+  btnPomodoroStart.textContent = '开始';
+  btnPomodoroStart.classList.add('primary-btn');
+  pomodoroLabelEl.textContent = '做的很好，小猫';
+});
+
+// Preset buttons
+document.querySelectorAll('.pomodoro-preset').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.pomodoro-preset').forEach(function(b) { b.classList.remove('active'); });
+    this.classList.add('active');
+    resetPomodoro();
+  });
+});
+
+// ============ Period Tracker ============
+var periodViewYear, periodViewMonth;
+var periodData = JSON.parse(localStorage.getItem('qinche_period_data') || '{}');
+
+function savePeriodData() {
+  localStorage.setItem('qinche_period_data', JSON.stringify(periodData));
+}
+
+function renderPeriodCalendar() {
+  var now = new Date();
+  if (!periodViewYear) { periodViewYear = now.getFullYear(); periodViewMonth = now.getMonth() + 1; }
+  document.getElementById('periodYearLabel').textContent = periodViewYear + '年';
+  document.getElementById('periodMonthLabelClick').textContent = periodViewMonth + '月';
+
+  var firstDay = new Date(periodViewYear, periodViewMonth - 1, 1).getDay();
+  var daysInMonth = new Date(periodViewYear, periodViewMonth, 0).getDate();
+
+  var html = '';
+  var headers = ['日', '一', '二', '三', '四', '五', '六'];
+  headers.forEach(function(h) {
+    html += '<div class="period-day-header">' + h + '</div>';
+  });
+
+  for (var i = 0; i < firstDay; i++) {
+    html += '<div class="period-day empty"></div>';
+  }
+
+  var todayStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+  var markedCount = 0;
+
+  for (var d = 1; d <= daysInMonth; d++) {
+    var dateStr = periodViewYear + '-' + String(periodViewMonth).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+    var cls = 'period-day';
+    if (dateStr === todayStr) cls += ' today';
+    if (periodData[dateStr]) { cls += ' marked'; markedCount++; }
+    html += '<div class="' + cls + '" data-date="' + dateStr + '">' + d + '</div>';
+  }
+
+  document.getElementById('periodCalendar').innerHTML = html;
+  document.getElementById('periodMarkedCount').textContent = markedCount;
+
+  // Click to toggle marks
+  document.querySelectorAll('.period-day:not(.empty)').forEach(function(dayEl) {
+    dayEl.addEventListener('click', function() {
+      var date = this.dataset.date;
+      if (periodData[date]) {
+        delete periodData[date];
+        this.classList.remove('marked');
+      } else {
+        periodData[date] = true;
+        this.classList.add('marked');
+      }
+      savePeriodData();
+      updatePeriodStats();
+    });
+  });
+
+  updatePeriodStats();
+}
+
+function updatePeriodStats() {
+  var dates = Object.keys(periodData).sort();
+  var markedCount = 0;
+  var monthPrefix = periodViewYear + '-' + String(periodViewMonth).padStart(2,'0');
+  dates.forEach(function(d) { if (d.startsWith(monthPrefix)) markedCount++; });
+  document.getElementById('periodMarkedCount').textContent = markedCount || '--';
+
+  // Average cycle length
+  if (dates.length >= 2) {
+    var sum = 0, count = 0;
+    for (var i = 1; i < dates.length; i++) {
+      var diff = (new Date(dates[i]) - new Date(dates[i-1])) / (1000*60*60*24);
+      if (diff > 1 && diff < 60) { sum += diff; count++; }
+    }
+    document.getElementById('periodCycleLen').textContent = count > 0 ? Math.round(sum / count) : '--';
+  } else {
+    document.getElementById('periodCycleLen').textContent = '--';
+  }
+
+}
+
+document.getElementById('btnPeriodPrev').addEventListener('click', function() {
+  periodViewMonth--;
+  if (periodViewMonth < 1) { periodViewMonth = 12; periodViewYear--; }
+  renderPeriodCalendar();
+});
+
+document.getElementById('btnPeriodNext').addEventListener('click', function() {
+  periodViewMonth++;
+  if (periodViewMonth > 12) { periodViewMonth = 1; periodViewYear++; }
+  renderPeriodCalendar();
+});
+
+// Year/Month pickers
+var yearPickerWrap = document.getElementById('periodYearPickerWrap');
+var yearPickerList = document.getElementById('periodYearList');
+var monthPickerWrap = document.getElementById('periodMonthPickerWrap');
+var monthPickerList = document.getElementById('periodMonthList');
+var yearLabel = document.getElementById('periodYearLabel');
+var monthLabel = document.getElementById('periodMonthLabelClick');
+
+function buildYearPicker() {
+  var currentYear = new Date().getFullYear();
+  var html = '';
+  for (var y = currentYear - 5; y <= currentYear + 5; y++) {
+    var cls = 'period-picker-item' + (y === periodViewYear ? ' active' : '');
+    html += '<div class="' + cls + '" data-year="' + y + '">' + y + '</div>';
+  }
+  yearPickerList.innerHTML = html;
+}
+
+function buildMonthPicker() {
+  var html = '';
+  for (var m = 1; m <= 12; m++) {
+    var cls = 'period-picker-item' + (m === periodViewMonth ? ' active' : '');
+    html += '<div class="' + cls + '" data-month="' + m + '">' + m + '月</div>';
+  }
+  monthPickerList.innerHTML = html;
+}
+
+function closeAllPickers() {
+  yearPickerWrap.classList.remove('open');
+  monthPickerWrap.classList.remove('open');
+}
+
+yearLabel.addEventListener('click', function(e) {
+  e.stopPropagation();
+  monthPickerWrap.classList.remove('open');
+  yearPickerWrap.classList.toggle('open');
+  if (yearPickerWrap.classList.contains('open')) {
+    buildYearPicker();
+    // Scroll to active item
+    var active = yearPickerList.querySelector('.active');
+    if (active) active.scrollIntoView({block: 'center'});
+  }
+});
+
+monthLabel.addEventListener('click', function(e) {
+  e.stopPropagation();
+  yearPickerWrap.classList.remove('open');
+  monthPickerWrap.classList.toggle('open');
+  if (monthPickerWrap.classList.contains('open')) {
+    buildMonthPicker();
+    var active = monthPickerList.querySelector('.active');
+    if (active) active.scrollIntoView({block: 'center'});
+  }
+});
+
+yearPickerList.addEventListener('click', function(e) {
+  var item = e.target.closest('.period-picker-item');
+  if (!item) return;
+  periodViewYear = parseInt(item.dataset.year);
+  closeAllPickers();
+  renderPeriodCalendar();
+});
+
+monthPickerList.addEventListener('click', function(e) {
+  var item = e.target.closest('.period-picker-item');
+  if (!item) return;
+  periodViewMonth = parseInt(item.dataset.month);
+  closeAllPickers();
+  renderPeriodCalendar();
+});
+
+document.addEventListener('click', function() {
+  closeAllPickers();
+});
+
+// ============ Notepad Feed Diary ============
+var notepadArea = document.getElementById('notepadArea');
+var notepadHint = document.getElementById('notepadHint');
+var notepadFeed = document.getElementById('notepadFeed');
+var notepadTodayLabel = document.getElementById('notepadTodayLabel');
+var notepadSaveTimeout = null;
+
+function notepadDateKey(dateStr) {
+  return 'qinche_notepad_' + dateStr;
+}
+
+function notepadDateDisplay(dateStr) {
+  var parts = dateStr.split('-');
+  return parts[0] + '年' + parseInt(parts[1]) + '月' + parseInt(parts[2]) + '日';
+}
+
+function notepadTodayStr() {
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function notepadRenderFeed() {
+  var html = '';
+  // Scan localStorage for all notepad keys
+  var entries = [];
+  for (var i = 0; i < localStorage.length; i++) {
+    var key = localStorage.key(i);
+    if (key.startsWith('qinche_notepad_')) {
+      var dateStr = key.replace('qinche_notepad_', '');
+      var text = localStorage.getItem(key);
+      if (text && text.trim()) {
+        entries.push({ date: dateStr, text: text.trim() });
+      }
+    }
+  }
+  // Sort by date (newest first)
+  entries.sort(function(a, b) { return b.date.localeCompare(a.date); });
+
+  if (entries.length === 0) {
+    html = '<div class="notepad-empty-feed">还没有记录，开始写吧</div>';
+  } else {
+    entries.forEach(function(entry) {
+      html += '<div class="notepad-entry">';
+      html += '<div class="notepad-entry-date">' + notepadDateDisplay(entry.date) + '</div>';
+      html += '<div class="notepad-entry-content">' + entry.text.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
+      html += '</div>';
+    });
+  }
+  notepadFeed.innerHTML = html;
+}
+
+function notepadLoadToday() {
+  var todayKey = notepadDateKey(notepadTodayStr());
+  notepadArea.value = localStorage.getItem(todayKey) || '';
+  notepadTodayLabel.textContent = '写今天 · ' + notepadDateDisplay(notepadTodayStr());
+  notepadHint.textContent = '已自动保存';
+  notepadHint.classList.remove('saved');
+}
+
+function notepadSaveToday() {
+  var todayKey = notepadDateKey(notepadTodayStr());
+  var val = notepadArea.value;
+  localStorage.setItem(todayKey, val);
+  notepadHint.textContent = '已自动保存 ' + new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'});
+  notepadHint.classList.add('saved');
+  clearTimeout(notepadSaveTimeout);
+  notepadSaveTimeout = setTimeout(function() {
+    notepadHint.classList.remove('saved');
+  }, 1500);
+  notepadRenderFeed();
+}
+
+notepadArea.addEventListener('input', notepadSaveToday);
+
+// Init
+function notepadInit() {
+  notepadLoadToday();
+  notepadRenderFeed();
+}
+
+(function() {
+  var origOpen = openUtilPanel;
+  openUtilPanel = function(name) {
+    origOpen(name);
+    if (name === 'notepad') notepadInit();
+  };
+})();
+
+// ============ Snake Game ============
+var snakeCanvas = document.getElementById('snakeCanvas');
+var snakeCtx = snakeCanvas.getContext('2d');
+var snakeScoreEl = document.getElementById('snakeScore');
+var snakeBestEl = document.getElementById('snakeBest');
+var btnSnakeStart = document.getElementById('btnSnakeStart');
+var btnSnakeEnd = document.getElementById('btnSnakeEnd');
+var btnSnakePause = document.getElementById('btnSnakePause');
+var snakeInterval = null;
+var snakeRunning = false;
+var snakeStarted = false;
+var snakePaused = false;
+var snakeGrid = 20;
+var snakeCols = snakeCanvas.width / snakeGrid;
+var snakeRows = snakeCanvas.height / snakeGrid;
+var snake = [];
+var snakeDir = {x: 1, y: 0};
+var snakeNextDir = {x: 1, y: 0};
+var snakeFood = {};
+var snakeScore = 0;
+var snakeBest = parseInt(localStorage.getItem('qinche_snake_best') || '0');
+var snakeAppleImg = new Image();
+snakeAppleImg.src = 'icon/apple.png';
+
+snakeBestEl.textContent = snakeBest;
+
+function snakeInit() {
+  snake = [
+    {x: 10, y: 10},
+    {x: 9, y: 10},
+    {x: 8, y: 10}
+  ];
+  snakeDir = {x: 1, y: 0};
+  snakeNextDir = {x: 1, y: 0};
+  snakeScore = 0;
+  snakeScoreEl.textContent = '0';
+  snakeSpawnFood();
+  snakeRunning = true;
+  snakeStarted = true;
+  snakePaused = false;
+  btnSnakeStart.textContent = '重新开始';
+  btnSnakeEnd.style.display = 'none';
+  btnSnakePause.style.display = '';
+  btnSnakePause.textContent = '暂停';
+  clearInterval(snakeInterval);
+  snakeInterval = setInterval(snakeTick, 120);
+  snakeDraw();
+}
+
+function snakeSpawnFood() {
+  var maxAttempts = 500;
+  for (var i = 0; i < maxAttempts; i++) {
+    var fx = Math.floor(Math.random() * snakeCols);
+    var fy = Math.floor(Math.random() * snakeRows);
+    var onSnake = false;
+    for (var j = 0; j < snake.length; j++) {
+      if (snake[j].x === fx && snake[j].y === fy) { onSnake = true; break; }
+    }
+    if (!onSnake) {
+      snakeFood = {x: fx, y: fy};
+      return;
+    }
+  }
+  // Fallback
+  snakeFood = {x: Math.floor(Math.random() * snakeCols), y: Math.floor(Math.random() * snakeRows)};
+}
+
+function snakeTick() {
+  if (snakePaused) return;
+  snakeDir = {x: snakeNextDir.x, y: snakeNextDir.y};
+  var head = {x: snake[0].x + snakeDir.x, y: snake[0].y + snakeDir.y};
+
+  // Wall collision
+  if (head.x < 0 || head.x >= snakeCols || head.y < 0 || head.y >= snakeRows) {
+    snakeGameOver();
+    return;
+  }
+
+  // Self collision
+  for (var i = 0; i < snake.length; i++) {
+    if (snake[i].x === head.x && snake[i].y === head.y) {
+      snakeGameOver();
+      return;
+    }
+  }
+
+  snake.unshift(head);
+
+  // Eat food
+  if (head.x === snakeFood.x && head.y === snakeFood.y) {
+    snakeScore += 10;
+    snakeScoreEl.textContent = snakeScore;
+    snakeSpawnFood();
+  } else {
+    snake.pop();
+  }
+
+  snakeDraw();
+}
+
+function snakeDraw() {
+  snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+
+  // Grid lines (subtle)
+  snakeCtx.strokeStyle = 'rgba(255,255,255,0.02)';
+  snakeCtx.lineWidth = 0.5;
+  for (var x = 0; x <= snakeCols; x++) {
+    snakeCtx.beginPath();
+    snakeCtx.moveTo(x * snakeGrid, 0);
+    snakeCtx.lineTo(x * snakeGrid, snakeCanvas.height);
+    snakeCtx.stroke();
+  }
+  for (var y = 0; y <= snakeRows; y++) {
+    snakeCtx.beginPath();
+    snakeCtx.moveTo(0, y * snakeGrid);
+    snakeCtx.lineTo(snakeCanvas.width, y * snakeGrid);
+    snakeCtx.stroke();
+  }
+
+  // Snake
+  for (var i = 0; i < snake.length; i++) {
+    var alpha = 1 - (i / (snake.length + 10)) * 0.5;
+    var r = i === 0 ? 196 : 100;
+    var g = i === 0 ? 30 : 10;
+    var b = i === 0 ? 58 : 8;
+    snakeCtx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+    snakeCtx.fillRect(snake[i].x * snakeGrid + 1, snake[i].y * snakeGrid + 1, snakeGrid - 2, snakeGrid - 2);
+    // Head glow
+    if (i === 0) {
+      snakeCtx.fillStyle = 'rgba(255,45,45,0.6)';
+      snakeCtx.fillRect(snake[i].x * snakeGrid + 3, snake[i].y * snakeGrid + 3, snakeGrid - 6, snakeGrid - 6);
+    }
+  }
+
+  // Food (apple)
+  snakeCtx.drawImage(snakeAppleImg,
+    snakeFood.x * snakeGrid - 1, snakeFood.y * snakeGrid - 1,
+    snakeGrid + 2, snakeGrid + 2);
+
+  // Game over overlay (only after game was started)
+  if (!snakeRunning && snakeStarted) {
+    snakeCtx.fillStyle = 'rgba(0,0,0,0.7)';
+    snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+    snakeCtx.fillStyle = '#c41e3a';
+    snakeCtx.font = 'bold 28px "Microsoft YaHei"';
+    snakeCtx.textAlign = 'center';
+    snakeCtx.fillText('游戏结束', snakeCanvas.width/2, snakeCanvas.height/2 - 10);
+    snakeCtx.fillStyle = '#d4c5b9';
+    snakeCtx.font = '16px "Microsoft YaHei"';
+    snakeCtx.fillText('得分: ' + snakeScore, snakeCanvas.width/2, snakeCanvas.height/2 + 30);
+    snakeCtx.textAlign = 'start';
+  } else if (snakePaused) {
+    snakeCtx.fillStyle = 'rgba(0,0,0,0.6)';
+    snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+    snakeCtx.fillStyle = '#d4c5b9';
+    snakeCtx.font = 'bold 24px "Microsoft YaHei"';
+    snakeCtx.textAlign = 'center';
+    snakeCtx.fillText('已暂停', snakeCanvas.width/2, snakeCanvas.height/2);
+    snakeCtx.textAlign = 'start';
+  }
+}
+
+function snakeGameOver() {
+  snakeRunning = false;
+  clearInterval(snakeInterval);
+  if (snakeScore > snakeBest) {
+    snakeBest = snakeScore;
+    localStorage.setItem('qinche_snake_best', snakeBest);
+    snakeBestEl.textContent = snakeBest;
+  }
+  btnSnakeStart.textContent = '重新开始';
+  btnSnakeEnd.style.display = '';
+  btnSnakePause.style.display = 'none';
+  snakeDraw();
+}
+
+function snakeResetToIdle() {
+  clearInterval(snakeInterval);
+  snakeRunning = false;
+  snakeStarted = false;
+  snakePaused = false;
+  snake = [];
+  snakeScore = 0;
+  snakeScoreEl.textContent = '0';
+  snakeDir = {x: 1, y: 0};
+  snakeNextDir = {x: 1, y: 0};
+  btnSnakeStart.textContent = '开始游戏';
+  btnSnakeEnd.style.display = 'none';
+  btnSnakePause.style.display = 'none';
+  snakeDraw();
+}
+
+btnSnakeStart.addEventListener('click', function() {
+  if (snakeInterval) clearInterval(snakeInterval);
+  snakeInit();
+});
+
+btnSnakePause.addEventListener('click', function() {
+  if (!snakeRunning) return;
+  snakePaused = !snakePaused;
+  btnSnakePause.textContent = snakePaused ? '继续' : '暂停';
+  if (!snakePaused) snakeTick();
+  snakeDraw();
+});
+
+btnSnakeEnd.addEventListener('click', function() {
+  snakeResetToIdle();
+});
+
+document.addEventListener('keydown', function(e) {
+  var panel = document.getElementById('snakePanel');
+  if (!panel.classList.contains('active')) return;
+  if (!snakeRunning) return;
+
+  if (e.key === ' ' || e.code === 'Space') {
+    e.preventDefault();
+    snakePaused = !snakePaused;
+    btnSnakePause.textContent = snakePaused ? '继续' : '暂停';
+    snakeDraw();
+    return;
+  }
+
+  if (snakePaused) return;
+
+  switch(e.key) {
+    case 'ArrowUp':
+      e.preventDefault();
+      if (snakeDir.y === 0) { snakeNextDir = {x: 0, y: -1}; }
+      break;
+    case 'ArrowDown':
+      e.preventDefault();
+      if (snakeDir.y === 0) { snakeNextDir = {x: 0, y: 1}; }
+      break;
+    case 'ArrowLeft':
+      e.preventDefault();
+      if (snakeDir.x === 0) { snakeNextDir = {x: -1, y: 0}; }
+      break;
+    case 'ArrowRight':
+      e.preventDefault();
+      if (snakeDir.x === 0) { snakeNextDir = {x: 1, y: 0}; }
+      break;
+  }
+});
+
+// Draw initial state
+snakeDraw();
+
 </script>
 
 </body>
-</html>
