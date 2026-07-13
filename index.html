@@ -699,6 +699,9 @@ footer .heart {
 .player-btn:hover { color: var(--red); }
 .player-btn.play-btn { font-size: 1.1rem; color: var(--text-light); }
 .player-btn.play-btn:hover { color: var(--red-glow); }
+
+.play-icon-img { width: 18px; height: 18px; object-fit: contain; vertical-align: middle; }
+.player-btn.playing-icon { border-radius: 50%; transition: box-shadow 0.25s ease; }
 .player-btn.active { color: var(--red); }
 
 .player-info {
@@ -967,6 +970,7 @@ footer .heart {
   .music-player { padding: 0 6px; gap: 2px; }
   .player-btn { width: 26px; height: 26px; font-size: 0.75rem; padding: 2px; }
   .player-btn.play-btn { font-size: 0.85rem; }
+  .play-icon-img { width: 16px; height: 16px; }
   .player-mode-btn, .player-list-btn { font-size: 0; padding: 3px 4px; border: 1px solid transparent; }
   .player-mode-btn:hover, .player-list-btn:hover { border-color: var(--red-dark); }
   .btn-icon { width: 14px; height: 14px; }
@@ -3231,8 +3235,51 @@ function loadTrack(index) {
 }
 
 function updatePlayBtn() {
-  btnPlay.textContent = bgm.paused ? '▶' : '⏸';
+  if (window.innerWidth <= 768) {
+    // 手机端：播放中用图标
+    if (bgm.paused) {
+      btnPlay.innerHTML = '▶';
+      btnPlay.classList.remove('playing-icon');
+    } else {
+      btnPlay.innerHTML = '<img src="icon/be-playing.png" class="play-icon-img" alt="">';
+      btnPlay.classList.add('playing-icon');
+    }
+  } else {
+    btnPlay.textContent = bgm.paused ? '▶' : '⏸';
+    btnPlay.classList.remove('playing-icon');
+  }
 }
+
+// 手机端：悬浮切换图标 + 发光
+btnPlay.addEventListener('mouseenter', function() {
+  if (window.innerWidth <= 768 && !bgm.paused) {
+    var img = this.querySelector('.play-icon-img');
+    if (img) img.src = 'icon/be-playing2.png';
+    this.style.boxShadow = '0 0 16px rgba(255,45,45,0.6)';
+  }
+});
+btnPlay.addEventListener('mouseleave', function() {
+  if (window.innerWidth <= 768 && !bgm.paused) {
+    var img = this.querySelector('.play-icon-img');
+    if (img) img.src = 'icon/be-playing.png';
+    this.style.boxShadow = '';
+  }
+});
+// 触屏设备手指按下时也切换
+btnPlay.addEventListener('touchstart', function() {
+  if (window.innerWidth <= 768 && !bgm.paused) {
+    var img = this.querySelector('.play-icon-img');
+    if (img) img.src = 'icon/be-playing2.png';
+    this.style.boxShadow = '0 0 16px rgba(255,45,45,0.6)';
+  }
+}, { passive: true });
+btnPlay.addEventListener('touchend', function() {
+  if (window.innerWidth <= 768 && !bgm.paused) {
+    var img = this.querySelector('.play-icon-img');
+    if (img) img.src = 'icon/be-playing.png';
+    this.style.boxShadow = '';
+  }
+});
 
 function updateModeBtn() {
   if (playMode === 'list-loop') {
