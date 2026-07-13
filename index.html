@@ -1490,92 +1490,6 @@ footer .heart {
   opacity: 0.5;
 }
 
-/* Todo date headers */
-.todo-date-header {
-  font-size: 0.85rem;
-  color: var(--red);
-  letter-spacing: 2px;
-  padding: 8px 0 4px;
-  font-weight: 600;
-}
-
-.todo-date-header.first { padding-top: 0; }
-
-/* History section */
-.todo-history-section {
-  margin-top: 8px;
-}
-
-.todo-history-toggle {
-  width: 100%;
-  background: none;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 10px 14px;
-  font-size: 0.8rem;
-  letter-spacing: 2px;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: all 0.25s ease;
-  font-family: 'Microsoft YaHei', sans-serif;
-  margin-bottom: 4px;
-}
-
-.todo-history-toggle:hover {
-  border-color: var(--red-dark);
-  color: var(--text-light);
-}
-
-.todo-history-toggle .arrow {
-  display: inline-block;
-  transition: transform 0.3s ease;
-  font-size: 0.7rem;
-}
-
-.todo-history-toggle.open .arrow {
-  transform: rotate(90deg);
-}
-
-.todo-history-body {
-  display: none;
-  padding: 4px 0 4px 8px;
-}
-
-.todo-history-body.open { display: block; }
-
-/* Carryover badge */
-.todo-carryover-tag {
-  display: inline-block;
-  font-size: 0.6rem;
-  color: var(--gold);
-  background: rgba(201,169,110,0.1);
-  border: 1px solid rgba(201,169,110,0.2);
-  padding: 1px 8px;
-  border-radius: 10px;
-  letter-spacing: 1px;
-  margin-left: 8px;
-  vertical-align: middle;
-}
-
-.todo-carryover-tag.overdue {
-  color: var(--red-glow);
-  background: rgba(255,45,45,0.08);
-  border-color: rgba(255,45,45,0.2);
-}
-
-/* History todo items (slightly smaller) */
-.todo-history-body .todo-item {
-  padding: 7px 4px;
-}
-
-.todo-history-body .todo-text {
-  font-size: 0.8rem;
-}
-
 @media (max-width: 768px) {
   .util-panel { padding: 20px; max-width: 96%; }
   .pomodoro-time { font-size: 3.2rem; }
@@ -3840,218 +3754,76 @@ document.addEventListener('click', function() {
   closeAllPickers();
 });
 
-// ============ Todo List (30-day history + auto carryover) ============
+// ============ Todo List ============
 var TODO_KEY = 'qinche_todos';
-var MAX_DAYS = 30;
 var todoInput = document.getElementById('todoInput');
 var btnTodoAdd = document.getElementById('btnTodoAdd');
 var todoList = document.getElementById('todoList');
 var todoCount = document.getElementById('todoCount');
 
-function todayKey() {
-  var d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-}
-
-function dateDisplay(dateStr) {
-  var parts = dateStr.split('-');
-  return parts[0] + '年' + parseInt(parts[1]) + '月' + parseInt(parts[2]) + '日';
-}
-
-function shortDateDisplay(dateStr) {
-  var parts = dateStr.split('-');
-  return parseInt(parts[1]) + '月' + parseInt(parts[2]) + '日';
-}
-
-function loadAllTodoData() {
+function loadTodos() {
   try {
     var data = localStorage.getItem(TODO_KEY);
-    return data ? JSON.parse(data) : {};
-  } catch(e) { return {}; }
+    return data ? JSON.parse(data) : [];
+  } catch(e) { return []; }
 }
 
-function saveAllTodoData(data) {
-  localStorage.setItem(TODO_KEY, JSON.stringify(data));
-}
-
-// Migrate undone todos from yesterday to today
-function migrateUndoneTodos() {
-  var data = loadAllTodoData();
-  var today = todayKey();
-
-  // Get yesterday's key
-  var yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  var yKey = yesterday.getFullYear() + '-' + String(yesterday.getMonth()+1).padStart(2,'0') + '-' + String(yesterday.getDate()).padStart(2,'0');
-
-  if (!data[yKey]) return data;
-
-  var undone = data[yKey].filter(function(t) { return !t.done; });
-  if (undone.length === 0) return data;
-
-  if (!data[today]) data[today] = [];
-  undone.forEach(function(t) {
-    // Avoid duplicates (same text + same createdAt already in today)
-    var exists = data[today].some(function(tt) { return tt.text === t.text && tt.createdAt === t.createdAt; });
-    if (!exists) {
-      data[today].push({ text: t.text, done: false, createdAt: t.createdAt });
-    }
-  });
-
-  return data;
-}
-
-// Clean data older than 30 days
-function cleanOldTodos(data) {
-  var cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - MAX_DAYS);
-  var cutoffKey = cutoff.getFullYear() + '-' + String(cutoff.getMonth()+1).padStart(2,'0') + '-' + String(cutoff.getDate()).padStart(2,'0');
-
-  var keys = Object.keys(data).sort();
-  keys.forEach(function(k) {
-    if (k < cutoffKey) delete data[k];
-  });
-  return data;
+function saveTodos(todos) {
+  localStorage.setItem(TODO_KEY, JSON.stringify(todos));
 }
 
 function renderTodos() {
-  var data = loadAllTodoData();
-  data = migrateUndoneTodos();
-  data = cleanOldTodos(data);
-  saveAllTodoData(data);
-
-  var today = todayKey();
-  var todayTodos = data[today] || [];
-  var days = Object.keys(data).sort().reverse(); // newest first
-
+  var todos = loadTodos();
   todoList.innerHTML = '';
+  var activeCount = 0;
 
-  if (days.length === 0) {
+  if (todos.length === 0) {
     todoList.innerHTML = '<div class="todo-empty">还没有待办事项，开始添加吧</div>';
     todoCount.textContent = '';
     return;
   }
 
-  // Render today
-  todoList.innerHTML += '<div class="todo-date-header first">📅 ' + dateDisplay(today) + '</div>';
-  if (todayTodos.length === 0) {
-    todoList.innerHTML += '<div class="todo-empty" style="padding:12px 0;font-size:0.7rem;">今天还没有待办</div>';
-  } else {
-    var activeCount = 0;
-    todayTodos.forEach(function(todo, i) {
-      var isCarryover = todo.createdAt !== today;
-      if (!todo.done) activeCount++;
-      var item = document.createElement('div');
-      item.className = 'todo-item' + (todo.done ? ' done' : '');
-      var carryTag = '';
-      if (isCarryover) {
-        var daysAgo = Math.floor((new Date(today) - new Date(todo.createdAt)) / 86400000);
-        var tagClass = daysAgo > 3 ? ' todo-carryover-tag overdue' : ' todo-carryover-tag';
-        carryTag = '<span class="' + tagClass + '">📌 ' + shortDateDisplay(todo.createdAt) + '</span>';
-      }
-      item.innerHTML =
-        '<input type="checkbox" class="todo-checkbox" data-date="' + today + '" data-idx="' + i + '"' + (todo.done ? ' checked' : '') + '>' +
-        '<span class="todo-text">' + todo.text.replace(/</g, '&lt;').replace(/>/g, '&gt;') + carryTag + '</span>' +
-        '<button class="todo-delete" data-date="' + today + '" data-idx="' + i + '">删除</button>';
+  todos.forEach(function(todo, i) {
+    if (!todo.done) activeCount++;
+    var item = document.createElement('div');
+    item.className = 'todo-item' + (todo.done ? ' done' : '');
+    item.innerHTML =
+      '<input type="checkbox" class="todo-checkbox" data-idx="' + i + '"' + (todo.done ? ' checked' : '') + '>' +
+      '<span class="todo-text">' + todo.text.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>' +
+      '<button class="todo-delete" data-idx="' + i + '">删除</button>';
 
-      item.querySelector('.todo-checkbox').addEventListener('change', function() {
-        var d = this.dataset.date;
-        var idx = parseInt(this.dataset.idx);
-        var all = loadAllTodoData();
-        all[d][idx].done = this.checked;
-        saveAllTodoData(all);
-        renderTodos();
-      });
-      item.querySelector('.todo-delete').addEventListener('click', function() {
-        var d = this.dataset.date;
-        var idx = parseInt(this.dataset.idx);
-        var all = loadAllTodoData();
-        all[d].splice(idx, 1);
-        if (all[d].length === 0) delete all[d];
-        saveAllTodoData(all);
-        renderTodos();
-      });
-      todoList.appendChild(item);
-    });
-  }
-
-  // Render history (days before today)
-  var historyDays = days.filter(function(d) { return d !== today; });
-  if (historyDays.length > 0) {
-    todoList.innerHTML += '<div class="todo-divider"></div>';
-    todoList.innerHTML += '<div class="todo-date-header">📂 历史记录</div>';
-    var historySection = document.createElement('div');
-    historySection.className = 'todo-history-section';
-
-    historyDays.forEach(function(dateStr) {
-      var dayTodos = data[dateStr] || [];
-      if (dayTodos.length === 0) return;
-      var doneCount = dayTodos.filter(function(t) { return t.done; }).length;
-      var totalCount = dayTodos.length;
-
-      var toggle = document.createElement('button');
-      toggle.className = 'todo-history-toggle';
-      toggle.innerHTML = '<span>' + dateDisplay(dateStr) + ' · ' + doneCount + '/' + totalCount + ' 完成</span><span class="arrow">▶</span>';
-
-      var body = document.createElement('div');
-      body.className = 'todo-history-body';
-
-      dayTodos.forEach(function(todo, i) {
-        var item = document.createElement('div');
-        item.className = 'todo-item' + (todo.done ? ' done' : '');
-        item.innerHTML =
-          '<input type="checkbox" class="todo-checkbox" data-date="' + dateStr + '" data-idx="' + i + '"' + (todo.done ? ' checked' : '') + '>' +
-          '<span class="todo-text">' + todo.text.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>' +
-          '<button class="todo-delete" data-date="' + dateStr + '" data-idx="' + i + '">删除</button>';
-
-        item.querySelector('.todo-checkbox').addEventListener('change', function() {
-          var d = this.dataset.date;
-          var idx = parseInt(this.dataset.idx);
-          var all = loadAllTodoData();
-          all[d][idx].done = this.checked;
-          saveAllTodoData(all);
-          renderTodos();
-        });
-        item.querySelector('.todo-delete').addEventListener('click', function() {
-          var d = this.dataset.date;
-          var idx = parseInt(this.dataset.idx);
-          var all = loadAllTodoData();
-          all[d].splice(idx, 1);
-          if (all[d].length === 0) delete all[d];
-          saveAllTodoData(all);
-          renderTodos();
-        });
-        body.appendChild(item);
-      });
-
-      toggle.addEventListener('click', function() {
-        this.classList.toggle('open');
-        body.classList.toggle('open');
-      });
-
-      historySection.appendChild(toggle);
-      historySection.appendChild(body);
+    // Toggle done
+    item.querySelector('.todo-checkbox').addEventListener('change', function() {
+      var idx = parseInt(this.dataset.idx);
+      var tds = loadTodos();
+      tds[idx].done = this.checked;
+      saveTodos(tds);
+      renderTodos();
     });
 
-    todoList.appendChild(historySection);
-  }
+    // Delete
+    item.querySelector('.todo-delete').addEventListener('click', function() {
+      var idx = parseInt(this.dataset.idx);
+      var tds = loadTodos();
+      tds.splice(idx, 1);
+      saveTodos(tds);
+      renderTodos();
+    });
 
-  // Count
-  var allActive = 0, allDone = 0;
-  days.forEach(function(d) {
-    (data[d] || []).forEach(function(t) { if (t.done) allDone++; else allActive++; });
+    todoList.appendChild(item);
   });
-  todoCount.innerHTML = '<span>' + allActive + '</span> 项待完成  /  <span>' + allDone + '</span> 项已完成';
+
+  var total = todos.length;
+  var doneCount = total - activeCount;
+  todoCount.innerHTML = '<span>' + activeCount + '</span> 项待完成  /  <span>' + doneCount + '</span> 项已完成';
 }
 
 function addTodo() {
   var text = todoInput.value.trim();
   if (!text) return;
-  var today = todayKey();
-  var data = loadAllTodoData();
-  if (!data[today]) data[today] = [];
-  data[today].push({ text: text, done: false, createdAt: today });
-  saveAllTodoData(data);
+  var todos = loadTodos();
+  todos.unshift({ text: text, done: false, createdAt: Date.now() });
+  saveTodos(todos);
   todoInput.value = '';
   renderTodos();
 }
