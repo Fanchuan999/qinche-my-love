@@ -588,6 +588,52 @@ footer .heart {
   margin-top: 10px;
 }
 
+/* ============ Snake D-Pad (Mobile) ============ */
+.snake-dpad {
+  display: none;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.snake-dpad.visible { display: flex; }
+
+.dpad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 56px);
+  grid-template-rows: repeat(3, 56px);
+  gap: 4px;
+}
+
+.dpad-btn {
+  background: rgba(10,10,10,0.8);
+  border: 1px solid rgba(196,30,58,0.35);
+  border-radius: 8px;
+  color: var(--text-light);
+  cursor: pointer;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.dpad-btn:active {
+  background: rgba(196,30,58,0.5);
+  border-color: var(--red);
+  box-shadow: 0 0 16px rgba(196,30,58,0.4);
+  transform: scale(0.93);
+}
+
+.dpad-empty {
+  background: transparent;
+  border: none;
+  pointer-events: none;
+}
+
 @media (max-width: 768px) {
   #snakeCanvas { width: 320px; height: 320px; }
 }
@@ -2259,7 +2305,21 @@ footer .heart {
       <button class="pomodoro-btn" id="btnSnakePause" style="display:none;">暂停</button>
       <button class="pomodoro-btn" id="btnSnakeEnd" style="display:none;">结束</button>
     </div>
-    <div class="snake-hint">↑ ↓ ← → 方向键控制  ·  空格键暂停</div>
+    <div class="snake-hint" id="snakeHintPC">↑ ↓ ← → 方向键控制  ·  空格键暂停</div>
+    <div class="snake-hint" id="snakeHintMobile" style="display:none;">👇 下方按键控制方向  ·  双击画面暂停</div>
+    <div class="snake-dpad" id="snakeDpad">
+      <div class="dpad-grid">
+        <div class="dpad-empty"></div>
+        <button class="dpad-btn" id="dpadUp">▲</button>
+        <div class="dpad-empty"></div>
+        <button class="dpad-btn" id="dpadLeft">◀</button>
+        <div class="dpad-empty"></div>
+        <button class="dpad-btn" id="dpadRight">▶</button>
+        <div class="dpad-empty"></div>
+        <button class="dpad-btn" id="dpadDown">▼</button>
+        <div class="dpad-empty"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -3993,6 +4053,84 @@ document.addEventListener('keydown', function(e) {
 
 // Draw initial state
 snakeDraw();
+
+// ============ Snake Mobile D-Pad ============
+var isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+var snakeDpad = document.getElementById('snakeDpad');
+var snakeHintPC = document.getElementById('snakeHintPC');
+var snakeHintMobile = document.getElementById('snakeHintMobile');
+
+if (isTouchDevice) {
+  snakeDpad.classList.add('visible');
+  snakeHintPC.style.display = 'none';
+  snakeHintMobile.style.display = '';
+}
+
+var dpadBtns = {
+  up: document.getElementById('dpadUp'),
+  down: document.getElementById('dpadDown'),
+  left: document.getElementById('dpadLeft'),
+  right: document.getElementById('dpadRight')
+};
+
+var dpadInterval = null;
+
+function dpadSetDir(dir) {
+  if (!snakeRunning || snakePaused) return;
+  switch(dir) {
+    case 'up':
+      if (snakeDir.y === 0) snakeNextDir = {x: 0, y: -1};
+      break;
+    case 'down':
+      if (snakeDir.y === 0) snakeNextDir = {x: 0, y: 1};
+      break;
+    case 'left':
+      if (snakeDir.x === 0) snakeNextDir = {x: -1, y: 0};
+      break;
+    case 'right':
+      if (snakeDir.x === 0) snakeNextDir = {x: 1, y: 0};
+      break;
+  }
+}
+
+Object.keys(dpadBtns).forEach(function(dir) {
+  var btn = dpadBtns[dir];
+  btn.addEventListener('pointerdown', function(e) {
+    e.preventDefault();
+    dpadSetDir(dir);
+    // Rapid fire: hold to keep moving
+    if (!snakeRunning || snakePaused) return;
+    clearInterval(dpadInterval);
+    dpadInterval = setInterval(function() { dpadSetDir(dir); }, 80);
+  });
+  btn.addEventListener('pointerup', function(e) {
+    e.preventDefault();
+    clearInterval(dpadInterval);
+  });
+  btn.addEventListener('pointerleave', function(e) {
+    clearInterval(dpadInterval);
+  });
+  btn.addEventListener('pointercancel', function(e) {
+    clearInterval(dpadInterval);
+  });
+});
+
+// Double-tap canvas to pause on mobile
+var snakeCanvasEl = document.getElementById('snakeCanvas');
+var lastTap = 0;
+snakeCanvasEl.addEventListener('touchstart', function(e) {
+  if (!isTouchDevice) return;
+  var now = Date.now();
+  if (now - lastTap < 300) {
+    e.preventDefault();
+    if (!snakeRunning) return;
+    snakePaused = !snakePaused;
+    document.getElementById('btnSnakePause').textContent = snakePaused ? '继续' : '暂停';
+    if (!snakePaused) snakeTick();
+    snakeDraw();
+  }
+  lastTap = now;
+});
 
 // ============ Photo Upload Handler ============
 var photoFileInput = document.getElementById('photoFileInput');
