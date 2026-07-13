@@ -9,4 +9,7 @@ Thumbs.db
 
 # IDE
 .vscode/
-.idea/photos_backup/
+.idea/
+
+# 备份
+photos_backup/
