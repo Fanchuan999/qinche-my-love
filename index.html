@@ -2911,6 +2911,43 @@ quoteIntervalId = setInterval(function() {
   showQuote(quoteIndex);
 }, 5000);
 
+// ============ Quote Touch Swipe ============
+(function() {
+  var container = document.querySelector('.quotes-container');
+  var touchStartX = 0, touchStartY = 0;
+
+  container.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  container.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    // Only swipe if horizontal distance > 50px and greater than vertical
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      var allQuotes = getAllQuotes();
+      if (allQuotes.length === 0) return;
+      if (dx < 0) {
+        // 左滑 → 下一条
+        quoteIndex = (quoteIndex + 1) % allQuotes.length;
+      } else {
+        // 右滑 → 上一条
+        quoteIndex = (quoteIndex - 1 + allQuotes.length) % allQuotes.length;
+      }
+      showQuote(quoteIndex);
+      // Reset auto-rotation timer
+      if (quoteIntervalId) clearInterval(quoteIntervalId);
+      quoteIntervalId = setInterval(function() {
+        var qs = getAllQuotes();
+        if (qs.length === 0) return;
+        quoteIndex = (quoteIndex + 1) % qs.length;
+        showQuote(quoteIndex);
+      }, 5000);
+    }
+  });
+})();
+
 // ============ Particle System (Fire Embers) ============
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
