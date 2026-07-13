@@ -1344,116 +1344,149 @@ footer .heart {
   letter-spacing: 2px;
 }
 
-/* ============ Notepad ============ */
-/* Notepad flex layout for proper scrolling */
-#notepadPanel .util-panel {
+/* ============ Todo List ============ */
+#todoPanel .util-panel {
   display: flex;
   flex-direction: column;
   max-height: 82vh;
   overflow: hidden;
 }
 
-#notepadPanel .util-panel-header { flex-shrink: 0; }
+#todoPanel .util-panel-header { flex-shrink: 0; }
 
-.notepad-today-section {
+.todo-input-wrap {
+  display: flex;
+  gap: 8px;
   flex-shrink: 0;
+  margin-bottom: 2px;
 }
 
-.notepad-divider { flex-shrink: 0; }
-
-.notepad-feed {
+.todo-input {
   flex: 1;
-  overflow-y: auto;
-  min-height: 0;
-  max-height: none;
-}
-
-.notepad-today-section {
-  margin-bottom: 0;
-}
-
-.notepad-today-label {
-  font-size: 0.82rem;
-  color: var(--red);
-  letter-spacing: 2px;
-  margin-bottom: 10px;
-}
-
-.notepad-area {
-  width: 100%;
-  min-height: 140px;
   background: rgba(0,0,0,0.3);
   border: 1px solid var(--border);
   border-radius: 4px;
   color: var(--text-light);
-  font-size: 0.9rem;
-  font-family: 'Microsoft YaHei', sans-serif;
-  line-height: 1.8;
-  padding: 14px;
-  resize: vertical;
-  outline: none;
-  transition: border-color 0.3s ease;
+  padding: 10px 14px;
+  font-size: 0.85rem;
   letter-spacing: 1px;
+  outline: none;
+  font-family: 'Microsoft YaHei', sans-serif;
+  transition: border-color 0.3s ease;
 }
 
-.notepad-area:focus { border-color: var(--red-dark); }
+.todo-input:focus { border-color: var(--red-dark); }
 
-.notepad-area::placeholder { color: rgba(138,126,114,0.4); letter-spacing: 2px; }
+.todo-input::placeholder { color: rgba(138,126,114,0.4); letter-spacing: 2px; }
 
-.notepad-hint {
-  text-align: right;
-  font-size: 0.65rem;
-  color: var(--text-muted);
+.todo-add-btn {
+  background: var(--red);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 10px 18px;
+  border-radius: 4px;
+  font-size: 0.82rem;
   letter-spacing: 2px;
-  margin-top: 6px;
-  transition: color 0.3s ease;
+  white-space: nowrap;
+  transition: all 0.25s ease;
 }
 
-.notepad-hint.saved { color: var(--red); }
+.todo-add-btn:hover {
+  background: var(--red-glow);
+  box-shadow: 0 0 16px rgba(255,45,45,0.3);
+}
 
-.notepad-divider {
+.todo-divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--red-dark), transparent);
-  margin: 18px 0;
+  margin: 14px 0;
+  flex-shrink: 0;
 }
 
-.notepad-feed {
-  max-height: 300px;
+.todo-list {
+  flex: 1;
   overflow-y: auto;
+  min-height: 0;
   scrollbar-width: thin;
   scrollbar-color: var(--red-dark) transparent;
 }
 
-.notepad-entry {
-  margin-bottom: 16px;
-  padding-bottom: 12px;
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px;
   border-bottom: 1px solid rgba(255,255,255,0.03);
+  transition: all 0.2s ease;
 }
 
-.notepad-entry:last-child { border-bottom: none; margin-bottom: 0; }
+.todo-item:hover { background: rgba(255,255,255,0.02); }
 
-.notepad-entry-date {
-  font-size: 0.78rem;
-  color: var(--red);
-  letter-spacing: 2px;
-  margin-bottom: 6px;
+.todo-checkbox {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: #c41e3a;
+  border-radius: 3px;
 }
 
-.notepad-entry-content {
+.todo-text {
+  flex: 1;
   font-size: 0.85rem;
   color: var(--text);
-  line-height: 1.8;
   letter-spacing: 1px;
-  white-space: pre-wrap;
+  line-height: 1.5;
   word-break: break-word;
+  transition: all 0.3s ease;
 }
 
-.notepad-empty-feed {
+.todo-item.done .todo-text {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.todo-delete {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.todo-item:hover .todo-delete { opacity: 1; }
+
+.todo-delete:hover {
+  color: var(--red);
+  border-color: var(--red-dark);
+}
+
+.todo-count {
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  padding: 10px 0 4px;
+  flex-shrink: 0;
+}
+
+.todo-count span { color: var(--red); font-weight: 600; }
+
+.todo-empty {
   text-align: center;
   color: var(--text-muted);
   font-size: 0.78rem;
   letter-spacing: 2px;
-  padding: 20px 0;
+  padding: 30px 0;
   opacity: 0.5;
 }
 
@@ -2040,7 +2073,7 @@ footer .heart {
     <div class="nav-dropdown" id="navDropdown">
       <div class="dropdown-item" data-panel="pomodoro">番茄钟</div>
       <div class="dropdown-item" data-panel="period">经期记录</div>
-      <div class="dropdown-item" data-panel="notepad">记事本</div>
+      <div class="dropdown-item" data-panel="todo">待办清单</div>
       <div class="dropdown-item" data-panel="snake">贪吃鸦</div>
       <div class="dropdown-item" data-panel="manage">内容管理</div>
     </div>
@@ -2273,20 +2306,22 @@ footer .heart {
   </div>
 </div>
 
-<!-- Notepad Panel -->
-<div class="util-overlay" id="notepadPanel">
+<!-- Todo Panel -->
+<div class="util-overlay" id="todoPanel">
   <div class="util-panel" style="max-width:540px;">
     <div class="util-panel-header">
-      <h3>记事本</h3>
-      <button class="util-panel-close" onclick="closeUtilPanel('notepad')">✕</button>
+      <h3>待办清单</h3>
+      <button class="util-panel-close" onclick="closeUtilPanel('todo')">✕</button>
     </div>
-    <div class="notepad-today-section">
-      <div class="notepad-today-label" id="notepadTodayLabel">写今天</div>
-      <textarea class="notepad-area" id="notepadArea" placeholder="记录今天的点点滴滴..."></textarea>
-      <div class="notepad-hint" id="notepadHint">已自动保存</div>
+    <div class="todo-input-wrap">
+      <input type="text" class="todo-input" id="todoInput" placeholder="添加新的待办事项..." maxlength="200">
+      <button class="todo-add-btn" id="btnTodoAdd">添加</button>
     </div>
-    <div class="notepad-divider"></div>
-    <div class="notepad-feed" id="notepadFeed"></div>
+    <div class="todo-divider"></div>
+    <div class="todo-list" id="todoList">
+      <div class="todo-empty">还没有待办事项，开始添加吧</div>
+    </div>
+    <div class="todo-count" id="todoCount"></div>
   </div>
 </div>
 
@@ -3719,91 +3754,96 @@ document.addEventListener('click', function() {
   closeAllPickers();
 });
 
-// ============ Notepad Feed Diary ============
-var notepadArea = document.getElementById('notepadArea');
-var notepadHint = document.getElementById('notepadHint');
-var notepadFeed = document.getElementById('notepadFeed');
-var notepadTodayLabel = document.getElementById('notepadTodayLabel');
-var notepadSaveTimeout = null;
+// ============ Todo List ============
+var TODO_KEY = 'qinche_todos';
+var todoInput = document.getElementById('todoInput');
+var btnTodoAdd = document.getElementById('btnTodoAdd');
+var todoList = document.getElementById('todoList');
+var todoCount = document.getElementById('todoCount');
 
-function notepadDateKey(dateStr) {
-  return 'qinche_notepad_' + dateStr;
+function loadTodos() {
+  try {
+    var data = localStorage.getItem(TODO_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch(e) { return []; }
 }
 
-function notepadDateDisplay(dateStr) {
-  var parts = dateStr.split('-');
-  return parts[0] + '年' + parseInt(parts[1]) + '月' + parseInt(parts[2]) + '日';
+function saveTodos(todos) {
+  localStorage.setItem(TODO_KEY, JSON.stringify(todos));
 }
 
-function notepadTodayStr() {
-  var d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-}
+function renderTodos() {
+  var todos = loadTodos();
+  todoList.innerHTML = '';
+  var activeCount = 0;
 
-function notepadRenderFeed() {
-  var html = '';
-  // Scan localStorage for all notepad keys
-  var entries = [];
-  for (var i = 0; i < localStorage.length; i++) {
-    var key = localStorage.key(i);
-    if (key.startsWith('qinche_notepad_')) {
-      var dateStr = key.replace('qinche_notepad_', '');
-      var text = localStorage.getItem(key);
-      if (text && text.trim()) {
-        entries.push({ date: dateStr, text: text.trim() });
-      }
-    }
+  if (todos.length === 0) {
+    todoList.innerHTML = '<div class="todo-empty">还没有待办事项，开始添加吧</div>';
+    todoCount.textContent = '';
+    return;
   }
-  // Sort by date (newest first)
-  entries.sort(function(a, b) { return b.date.localeCompare(a.date); });
 
-  if (entries.length === 0) {
-    html = '<div class="notepad-empty-feed">还没有记录，开始写吧</div>';
-  } else {
-    entries.forEach(function(entry) {
-      html += '<div class="notepad-entry">';
-      html += '<div class="notepad-entry-date">' + notepadDateDisplay(entry.date) + '</div>';
-      html += '<div class="notepad-entry-content">' + entry.text.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
-      html += '</div>';
+  todos.forEach(function(todo, i) {
+    if (!todo.done) activeCount++;
+    var item = document.createElement('div');
+    item.className = 'todo-item' + (todo.done ? ' done' : '');
+    item.innerHTML =
+      '<input type="checkbox" class="todo-checkbox" data-idx="' + i + '"' + (todo.done ? ' checked' : '') + '>' +
+      '<span class="todo-text">' + todo.text.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>' +
+      '<button class="todo-delete" data-idx="' + i + '">删除</button>';
+
+    // Toggle done
+    item.querySelector('.todo-checkbox').addEventListener('change', function() {
+      var idx = parseInt(this.dataset.idx);
+      var tds = loadTodos();
+      tds[idx].done = this.checked;
+      saveTodos(tds);
+      renderTodos();
     });
-  }
-  notepadFeed.innerHTML = html;
+
+    // Delete
+    item.querySelector('.todo-delete').addEventListener('click', function() {
+      var idx = parseInt(this.dataset.idx);
+      var tds = loadTodos();
+      tds.splice(idx, 1);
+      saveTodos(tds);
+      renderTodos();
+    });
+
+    todoList.appendChild(item);
+  });
+
+  var total = todos.length;
+  var doneCount = total - activeCount;
+  todoCount.innerHTML = '<span>' + activeCount + '</span> 项待完成  /  <span>' + doneCount + '</span> 项已完成';
 }
 
-function notepadLoadToday() {
-  var todayKey = notepadDateKey(notepadTodayStr());
-  notepadArea.value = localStorage.getItem(todayKey) || '';
-  notepadTodayLabel.textContent = '写今天 · ' + notepadDateDisplay(notepadTodayStr());
-  notepadHint.textContent = '已自动保存';
-  notepadHint.classList.remove('saved');
+function addTodo() {
+  var text = todoInput.value.trim();
+  if (!text) return;
+  var todos = loadTodos();
+  todos.unshift({ text: text, done: false, createdAt: Date.now() });
+  saveTodos(todos);
+  todoInput.value = '';
+  renderTodos();
 }
 
-function notepadSaveToday() {
-  var todayKey = notepadDateKey(notepadTodayStr());
-  var val = notepadArea.value;
-  localStorage.setItem(todayKey, val);
-  notepadHint.textContent = '已自动保存 ' + new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'});
-  notepadHint.classList.add('saved');
-  clearTimeout(notepadSaveTimeout);
-  notepadSaveTimeout = setTimeout(function() {
-    notepadHint.classList.remove('saved');
-  }, 1500);
-  notepadRenderFeed();
-}
-
-notepadArea.addEventListener('input', notepadSaveToday);
+btnTodoAdd.addEventListener('click', addTodo);
+todoInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') addTodo();
+});
 
 // Init
-function notepadInit() {
-  notepadLoadToday();
-  notepadRenderFeed();
+function todoInit() {
+  renderTodos();
+  todoInput.focus();
 }
 
 (function() {
-  var origOpen = openUtilPanel;
+  var origOpen2 = openUtilPanel;
   openUtilPanel = function(name) {
-    origOpen(name);
-    if (name === 'notepad') notepadInit();
+    origOpen2(name);
+    if (name === 'todo') todoInit();
   };
 })();
 
