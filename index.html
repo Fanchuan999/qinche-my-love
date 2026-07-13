@@ -1448,6 +1448,15 @@ footer .heart {
   opacity: 0.5;
 }
 
+.todo-date-tag {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  opacity: 0.5;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+  margin-right: 6px;
+}
+
 .todo-delete {
   background: none;
   border: 1px solid transparent;
@@ -3772,6 +3781,11 @@ function saveTodos(todos) {
   localStorage.setItem(TODO_KEY, JSON.stringify(todos));
 }
 
+function formatTodoDate(ts) {
+  var d = new Date(ts);
+  return (d.getMonth()+1) + '/' + d.getDate();
+}
+
 function renderTodos() {
   var todos = loadTodos();
   todoList.innerHTML = '';
@@ -3790,6 +3804,7 @@ function renderTodos() {
     item.innerHTML =
       '<input type="checkbox" class="todo-checkbox" data-idx="' + i + '"' + (todo.done ? ' checked' : '') + '>' +
       '<span class="todo-text">' + todo.text.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>' +
+      '<span class="todo-date-tag">' + formatTodoDate(todo.createdAt) + '</span>' +
       '<button class="todo-delete" data-idx="' + i + '">删除</button>';
 
     // Toggle done
