@@ -3933,17 +3933,9 @@ function renderTodos() {
   }
 
   // Render today
-  var dateHeader = document.createElement('div');
-  dateHeader.className = 'todo-date-header first';
-  dateHeader.textContent = '📅 ' + dateDisplay(today);
-  todoList.appendChild(dateHeader);
-
+  todoList.innerHTML += '<div class="todo-date-header first">📅 ' + dateDisplay(today) + '</div>';
   if (todayTodos.length === 0) {
-    var emptyDiv = document.createElement('div');
-    emptyDiv.className = 'todo-empty';
-    emptyDiv.style.cssText = 'padding:12px 0;font-size:0.7rem;';
-    emptyDiv.textContent = '今天还没有待办';
-    todoList.appendChild(emptyDiv);
+    todoList.innerHTML += '<div class="todo-empty" style="padding:12px 0;font-size:0.7rem;">今天还没有待办</div>';
   } else {
     var activeCount = 0;
     todayTodos.forEach(function(todo, i) {
@@ -3986,14 +3978,8 @@ function renderTodos() {
   // Render history (days before today)
   var historyDays = days.filter(function(d) { return d !== today; });
   if (historyDays.length > 0) {
-    var div1 = document.createElement('div');
-    div1.className = 'todo-divider';
-    todoList.appendChild(div1);
-
-    var div2 = document.createElement('div');
-    div2.className = 'todo-date-header';
-    div2.textContent = '📂 历史记录';
-    todoList.appendChild(div2);
+    todoList.innerHTML += '<div class="todo-divider"></div>';
+    todoList.innerHTML += '<div class="todo-date-header">📂 历史记录</div>';
     var historySection = document.createElement('div');
     historySection.className = 'todo-history-section';
 
